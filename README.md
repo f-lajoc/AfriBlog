@@ -270,7 +270,7 @@ Static files are served via **WhiteNoise**. Media files (cover images) are store
 
 ## Demo Video
 
-> 📹 [Watch the demo presentation](#) ← _i'll add video link when it's ready_
+> 📹 [Watch the demo presentation](https://drive.google.com/file/d/1MJk3X1N2M5cq_jwnkX_kbhAFMVCHhSLi/view?usp=drivesdk)
 
 ---
 
