@@ -1,0 +1,12 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<div class="auth-wrapper fade-in">
+    <h2>Register Author Profile</h2>
+    <form method="POST" class="editorial-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-submit-comment">Register Account</button>
+    </form>
+    <p class="auth-helper">Already registered? <a href="{% url 'login' %}">Login here</a></p>
+</div>
+{% endblock %}

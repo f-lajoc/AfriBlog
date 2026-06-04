@@ -1,0 +1,79 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+
+<div class="mainpage-header-hero">
+<h1>AfriBlog - Community Blogging Platform</h1>
+<p>A space for African voices - articles, opinions, and stories</p>
+</div>
+
+<section class="search-section">
+    <form method="GET" action="{% url 'index' %}" class="search-form">
+        <input type="text" name="search" placeholder="Search articles or topics..." value="{{ search_query }}">
+        <button type="submit">Search</button>
+    </form>
+</section>
+
+<div class="category-bar">
+    <button class="category-chip active" onclick="filterCategory('all')">All Articles</button>
+    {% for category in categories %}
+        <a href="{% url 'category' category.slug %}" class="category-chip">{{ category.name }}</a>
+    {% endfor %}
+</div>
+
+{% if featured_post and not search_query %}
+<section class="hero-section fade-in">
+    <div class="hero-card">
+        <div class="hero-badge">Featured Edition</div>
+        <div class="hero-content">
+            <span class="tag-chip">{{ featured_post.category.name }}</span>
+            <h2><a href="{% url 'detail' featured_post.slug %}">{{ featured_post.title }}</a></h2>
+            <p class="hero-excerpt">{{ featured_post.body|striptags|truncatewords:30 }}</p>
+            <div class="meta-row">
+                <span class="author-label">By {{ featured_post.author.username }}</span>
+                <span class="date-label">{{ featured_post.created_at|date:"M d, Y" }}</span>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="grid-section">
+    <h3 class="section-title">Latest Perspectives</h3>
+    <div class="magazine-grid">
+        {% for post in page_obj %}
+        <article class="article-card slide-up {% if post.featured %}featured-border{% endif %}">
+            {% if post.featured %}
+                <div class="gold-ribbon">⭐ Featured</div>
+            {% endif %}
+            <div class="card-body">
+                <span class="tag-chip">{{ post.category.name }}</span>
+                <h4><a href="{% url 'detail' post.slug %}">{{ post.title }}</a></h4>
+                <p>{{ post.body|striptags|truncatewords:18 }}</p>
+                <div class="card-footer">
+                    <div class="avatar-placeholder">{{ post.author.username|slice:":1"|upper }}</div>
+                    <div class="footer-meta">
+                        <h6><a href="{% url 'profile' post.author.username %}">{{ post.author.username }}</a></h6>
+                        <small>{{ post.created_at|date:"M d, Y" }}</small>
+                    </div>
+                </div>
+            </div>
+        </article>
+        {% empty %}
+        <p class="no-results">No stories match your criteria at this moment.</p>
+        {% endfor %}
+    </div>
+</section>
+
+{% if page_obj.has_other_pages %}
+<nav class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pag-btn">&laquo; Previous</a>
+    {% endif %}
+    <span class="pag-current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pag-btn">Next &raquo;</a>
+    {% endif %}
+</nav>
+{% endif %}
+
+{% endblock %}

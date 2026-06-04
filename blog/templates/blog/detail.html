@@ -1,0 +1,93 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+
+<div class="detail-container">
+    <article class="main-article fade-in">
+        <header class="article-header">
+            <span class="tag-chip">{{ post.category.name }}</span>
+            <h1>{{ post.title }}</h1>
+            <div class="article-meta-info">
+                <p>Published on <strong>{{ post.created_at|date:"F d, Y" }}</strong> by <strong>{{ post.author.username }}</strong></p>
+            </div>
+        </header>
+        
+        <hr class="divider">
+
+        <div class="article-body-content">
+            {{ post.body|linebreaks }}
+        </div>
+
+        <div class="social-share-box">
+            <span>Share this narrative:</span>
+            <button onclick="alert('Link copied to clipboard!')" class="share-btn">🔗 Copy Link</button>
+            <button class="share-btn font-accent">𝕏 Twitter</button>
+            <button class="share-btn font-accent">🦚 LinkedIn</button>
+        </div>
+    </article>
+
+    <aside class="author-sidebar slide-up">
+        <div class="sidebar-card">
+            <h3>Author Insights</h3>
+            <div class="sidebar-avatar">{{ post.author.username|slice:":1"|upper }}</div>
+            <h4>{{ post.author.username }}</h4>
+            <p class="author-bio">A resident contributor sharing insights, cultural perspectives, and editorial analysis on AfriBlog.</p>
+            <a href="{% url 'profile' post.author.username %}" class="view-profile-btn">View Column</a>
+        </div>
+
+        {% if user == post.author %}
+        <div class="sidebar-card management-actions">
+            <h3>Author Actions</h3>
+            <a href="{% url 'post_update' post.slug %}" class="btn-edit-action">Modify Content</a>
+            <a href="{% url 'post_delete' post.slug %}" class="btn-delete-action">Delete Article</a>
+        </div>
+        {% endif %}
+    </aside>
+</div>
+
+<section class="bottom-editorial-section grid-section">
+    <hr class="divider">
+    
+    <div class="related-articles-container">
+        <h3>Related Perspectives</h3>
+        <div class="magazine-grid">
+            {% for rel in related_posts %}
+            <article class="article-card">
+                <div class="card-body">
+                    <h4><a href="{% url 'detail' rel.slug %}">{{ rel.title }}</a></h4>
+                    <small>By {{ rel.author.username }}</small>
+                </div>
+            </article>
+            {% empty %}
+            <p>No related perspectives available in this category yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="comments-container" id="comments-wrapper">
+        <h3>Dialogue ({{ comments.count }})</h3>
+        
+        <div class="comments-list" id="dom-comments-list">
+            {% for comment in comments %}
+            <div class="comment-bubble">
+                <div class="comment-meta">
+                    <strong>{{ comment.name }}</strong> <small>{{ comment.created_at|date:"M d, Y" }}</small>
+                </div>
+                <p>{{ comment.body }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <form method="POST" class="comment-form" id="client-comment-form">
+            {% csrf_token %}
+            <h3>Leave a Reply</h3>
+            <div class="form-group-split">
+                <input type="text" name="name" id="comment-name" placeholder="Your Name" required>
+                <input type="email" name="email" id="comment-email" placeholder="Your Email" required>
+            </div>
+            <textarea name="body" id="comment-body" rows="4" placeholder="Join the discussion thoughtfully..." required></textarea>
+            <button type="submit" class="btn-submit-comment">Post Comment</button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

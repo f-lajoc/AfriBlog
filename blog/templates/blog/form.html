@@ -1,0 +1,21 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<div class="form-wrapper fade-in">
+    <h2>{% if object %}Revise Article{% else %}Compose New Post{% endif %}</h2>
+    <form method="POST" class="editorial-form">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}<small class="help-text">{{ field.help_text }}</small>{% endif %}
+                {% for error in field.errors %}<span class="error-text">{{ error }}</span>{% endfor %}
+            </div>
+        {% endfor %}
+        <div class="form-actions">
+            <button type="submit" class="btn-submit-comment">Submit Changes</button>
+            <a href="{% url 'index' %}" class="btn-cancel">Discard</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
