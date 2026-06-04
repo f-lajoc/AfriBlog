@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	initReadingProgressBar();
 	initCommentForm();
 	initCategoryToggle();
+	initAutoDismissMessages();
 });
 
 /* =========================
@@ -216,4 +217,24 @@ function initCategoryToggle() {
 			categorySelect.value = "";
 		}
 	});
+}
+
+/* =========================
+   5. Auto-dismiss Messages
+========================= */
+function initAutoDismissMessages() {
+    const messages = document.querySelectorAll(".auth-notice");
+    if (!messages.length) return;
+
+    messages.forEach((msg) => {
+        // Fade out after 4 seconds
+        setTimeout(() => {
+            msg.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+            msg.style.opacity = "0";
+            msg.style.transform = "translateY(-8px)";
+
+            // Remove from DOM after fade completes
+            setTimeout(() => msg.remove(), 600);
+        }, 2000);
+    });
 }

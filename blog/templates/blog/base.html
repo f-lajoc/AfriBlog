@@ -73,6 +73,16 @@
 </header>
 
 <main class="container">
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="auth-notice auth-notice--{{ message.tags }}">
+                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %} icon"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
     {% block content %}{% endblock %}
 </main>
 

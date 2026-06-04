@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.urls import reverse_lazy
@@ -80,7 +81,10 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            messages.success(request, f'Welcome to AfriBlog, {user.username}! Your account has been created.')
             return redirect('index')
+        else:
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = UserCreationForm()
     return render(request, 'blog/register.html', {'form': form})
@@ -92,7 +96,10 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            messages.success(request, f'Welcome back, {user.username}!')
             return redirect('index')
+        else:
+            messages.error(request, 'Invalid username or password. Please try again.')
     else:
         form = AuthenticationForm()
     return render(request, 'blog/login.html', {'form': form})
@@ -125,7 +132,9 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         post = form.save()
 
         if post.status == 'draft':
+            messages.success(self.request, f'"{post.title}" saved as a draft.')
             return redirect('drafts')
+        messages.success(self.request, f'"{post.title}" has been published.')
         return redirect('detail', slug=post.slug)
 
     def get_context_data(self, **kwargs):
@@ -155,7 +164,9 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         post = form.save()
 
         if post.status == 'draft':
+            messages.success(self.request, f'"{post.title}" saved as a draft.')
             return redirect('drafts')
+        messages.success(self.request, f'"{post.title}" has been updated and published.')
         return redirect('detail', slug=post.slug)
 
     def get_context_data(self, **kwargs):
@@ -171,6 +182,10 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         return self.request.user == self.get_object().author
+
+    def form_valid(self, form):
+        messages.success(self.request, f'"{self.get_object().title}" has been deleted.')
+        return super().form_valid(form)
 
 
 @login_required

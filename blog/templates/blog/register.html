@@ -8,6 +8,24 @@
         Register Author Profile
     </h2>
 
+    {% if messages %}
+        {% for message in messages %}
+            <div class="auth-notice auth-notice--{{ message.tags }}">
+                <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %} icon"></i>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if form.non_field_errors %}
+        <div class="auth-notice auth-notice--error">
+            <i class="fas fa-exclamation-circle icon"></i>
+            {% for error in form.non_field_errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <form method="POST" class="editorial-form">
 
         {% csrf_token %}
@@ -17,7 +35,21 @@
             Join AfriBlog as a writer
         </div>
 
-        {{ form.as_p }}
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                    <small class="help-text">{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                    <span class="field-error">
+                        <i class="fas fa-circle-exclamation icon"></i>
+                        {{ error }}
+                    </span>
+                {% endfor %}
+            </div>
+        {% endfor %}
 
         <button type="submit" class="btn-submit-comment">
             <i class="fas fa-user-check icon"></i>
@@ -29,9 +61,7 @@
     <p class="auth-helper">
         <i class="fas fa-right-to-bracket icon"></i>
         Already registered?
-        <a href="{% url 'login' %}">
-            Login here
-        </a>
+        <a href="{% url 'login' %}">Login here</a>
     </p>
 
 </div>
