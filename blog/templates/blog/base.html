@@ -1,60 +1,91 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AfriBlog — Community Blogging Platform</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
-    
+
+    <title>AfriBlog</title>
+
+    <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/434622864a.js" crossorigin="anonymous"></script>
 
-    {% load static %}
+    <!-- CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
 </head>
-<body class="light-mode">
-    <div id="scroll-progress-container">
-        <div id="scroll-progress-bar"></div>
+
+<body>
+
+<header class="main-header">
+    <div class="header-container">
+
+        <a href="{% url 'index' %}" class="logo">AfriBlog</a>
+
+        <nav class="nav-links">
+
+            {% if user.is_authenticated %}
+
+                <span class="welcome-user">
+                    <i class="fas fa-feather icon"></i>
+                    Welcome,
+                    <a href="{% url 'profile' user.username %}">{{ user.username }}</a>
+                </span>
+
+                <a href="{% url 'post_create' %}" class="btn-write">
+                    <i class="fas fa-pen-nib icon"></i>
+                    Write
+                </a>
+
+                <a href="{% url 'drafts' %}" class="auth-link">
+                    <i class="fas fa-file-alt icon"></i>
+                    Drafts
+                </a>
+
+                <a href="{% url 'logout' %}" class="auth-link">
+                    <i class="fas fa-sign-out-alt icon"></i>
+                    Logout
+                </a>
+
+            {% else %}
+
+                <a href="{% url 'login' %}" class="auth-link">
+                    <i class="fas fa-sign-in-alt icon"></i>
+                    Login
+                </a>
+
+                <a href="{% url 'register' %}" class="auth-link">
+                    <i class="fas fa-user-plus icon"></i>
+                    Register
+                </a>
+
+            {% endif %}
+
+            <button id="theme-toggle" class="theme-toggle">
+    <i class="fas fa-moon icon"></i>
+</button>
+
+        </nav>
+
     </div>
+</header>
 
-    <header class="main-header">
-        <div class="header-container">
-            <a href="{% url 'index' %}" class="logo">AfriBlog</a>
-            <nav class="nav-links">
-               {% if user.is_authenticated %}
-    <span class="welcome-user">🪶 Welcome, <a href="{% url 'profile' user.username %}">{{ user.username }}</a></span>
-    <a href="{% url 'post_create' %}" class="btn-write">
-        <i class="fas fa-pen-nib"></i> Write
-    </a>
-    <a href="{% url 'drafts' %}" class="auth-link">
-        <i class="fas fa-file-alt"></i> Drafts
-    </a>
-    <a href="{% url 'logout' %}" class="auth-link">
-        <i class="fas fa-sign-out-alt"></i> Logout
-    </a>
-{% else %}
-    <a href="{% url 'login' %}" class="auth-link">
-        <i class="fas fa-sign-in-alt"></i> Login
-    </a>
-    <a href="{% url 'register' %}" class="btn-write">
-        <i class="fas fa-user-plus"></i> Register
-    </a>
-{% endif %}
-                <button id="theme-toggle" aria-label="Toggle dark mode" class="theme-toggle-btn">🌙</button>
-            </nav>
-        </div>
-    </header>
+<main class="container">
+    {% block content %}{% endblock %}
+</main>
 
-    <main class="container">
-        {% block content %}{% endblock %}
-    </main>
+<footer class="main-footer">
+    <p>
+        <i class="fas fa-copyright icon"></i>
+        2026 AfriBlog -- Community Blogging Platform built by
+        <a href="https://github.com/f-lajoc" target="_blank">@lajoc_devs</a>
+    </p>
+</footer>
 
-    <footer class="main-footer">
-        <p>&copy; 2026 AfriBlog -- Community Blogging Platform built by <a href="https://github.com/f-lajoc" target="_blank">@lajoc_devs</a></p>
-    </footer>
+<!-- JS -->
+<script src="{% static 'js/main.js' %}" defer></script>
 
-    <script src="{% static 'js/main.js' %}" defer></script>
 </body>
 </html>

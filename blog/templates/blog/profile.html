@@ -1,25 +1,72 @@
 {% extends 'blog/base.html' %}
 {% block content %}
+
 <header class="profile-header slide-up">
-    <div class="profile-avatar">{{ author_username|slice:":1"|upper }}</div>
-    <h1>Author Column: {{ author_username }}</h1>
-    <p class="profile-stats">Total Published Works: <strong>{{ posts.count }}</strong></p>
+
+    <div class="profile-avatar">
+        <i class="fas fa-user icon"></i>
+        {{ author_username|slice:":1"|upper }}
+    </div>
+
+    <h1>
+        <i class="fas fa-pen-nib icon"></i>
+        Author Column: {{ author_username }}
+    </h1>
+
+    <p class="profile-stats">
+        <i class="fas fa-chart-line icon"></i>
+        Total Published Works:
+        <strong>{{ posts.count }}</strong>
+    </p>
+
 </header>
 
+
 <section class="magazine-grid">
+
     {% for post in posts %}
     <article class="article-card">
+
         <div class="card-body">
-            <span class="status-badge status-{{ post.status }}">{{ post.status|upper }}</span>
-            <h4><a href="{% url 'detail' post.slug %}">{{ post.title }}</a></h4>
-            <p>{{ post.body|striptags|truncatewords:20 }}</p>
+
+            <span class="status-badge status-{{ post.status }}">
+                <i class="fas fa-layer-group icon"></i>
+                {{ post.status|upper }}
+            </span>
+
+            <h4>
+                <a href="{% url 'detail' post.slug %}">
+                    <i class="fas fa-book-open icon"></i>
+                    {{ post.title }}
+                </a>
+            </h4>
+
+            <p>
+                {{ post.body|striptags|truncatewords:20 }}
+            </p>
+
             <div class="card-actions">
-                <a href="{% url 'post_update' post.slug %}" class="action-link-edit">Edit</a>
+
+                <a href="{% url 'post_update' post.slug %}" class="action-link-edit">
+                    <i class="fas fa-pen-to-square icon"></i>
+                    Edit
+                </a>
+
             </div>
+
         </div>
+
     </article>
+
     {% empty %}
-    <p>This author hasn't written any articles yet.</p>
+
+    <p class="no-results">
+        <i class="fas fa-folder-open icon"></i>
+        This author hasn't written any articles yet.
+    </p>
+
     {% endfor %}
+
 </section>
+
 {% endblock %}

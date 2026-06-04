@@ -1,72 +1,96 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-<div class="form-wrapper fade-in">
-    <h2>
-        <i class="fas fa-pen-nib"></i>
-        {% if object %}Revise Article{% else %}Compose New Post{% endif %}
-    </h2>
 
-    <form method="POST" class="editorial-form">
-        {% csrf_token %}
+<form method="POST" enctype="multipart/form-data" class="editorial-form">
 
-        {% for field in form %}
-            {% if field.name == 'status' %}
-                <div style="display:none;">{{ field }}</div>
+    {% csrf_token %}
 
-            {% else %}
-                <div class="form-group">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.help_text %}
-                        <small class="help-text">{{ field.help_text }}</small>
-                    {% endif %}
-                    {% for error in field.errors %}
-                        <span class="error-text">{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endfor %}
+    {% for field in form %}
 
-        <!-- Category — free text with datalist suggestions -->
-        <div class="form-group">
-            <label for="new-category-input">
-                <i class="fas fa-tag"></i> Category
-            </label>
-            <input
-                type="text"
-                name="new_category"
-                id="new-category-input"
-                placeholder="Type a category (e.g. Culture, Politics, Travel...)"
-                list="category-suggestions"
-                autocomplete="off"
-                value="{% if object and object.category %}{{ object.category.name }}{% endif %}"
-            >
-            <datalist id="category-suggestions">
-                {% for cat in categories %}
-                    <option value="{{ cat.name }}">
+        {% if field.name == 'status' %}
+            <div style="display:none;">{{ field }}</div>
+
+        {% else %}
+            <div class="form-group">
+
+                <label for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                </label>
+
+                {{ field }}
+
+                {% if field.help_text %}
+                    <small class="help-text">
+                        <i class="fas fa-circle-info icon"></i>
+                        {{ field.help_text }}
+                    </small>
+                {% endif %}
+
+                {% for error in field.errors %}
+                    <span class="error-text">
+                        <i class="fas fa-triangle-exclamation icon"></i>
+                        {{ error }}
+                    </span>
                 {% endfor %}
-            </datalist>
-            <small class="help-text">
-                <i class="fas fa-info-circle"></i>
-                Pick an existing category or type a new one — it will be created automatically.
-            </small>
-        </div>
 
-        <div class="form-actions">
-            <button type="submit" name="save_draft" class="btn-draft">
-                <i class="fas fa-save"></i> Save Draft
-            </button>
+            </div>
+        {% endif %}
 
-            <button type="submit" name="publish" class="btn-submit-comment">
-                <i class="fas fa-paper-plane"></i>
-                {% if object %}Update & Publish{% else %}Publish{% endif %}
-            </button>
+    {% endfor %}
 
-            <a href="{% url 'index' %}" class="btn-cancel">
-                <i class="fas fa-times"></i> Discard
-            </a>
-        </div>
-    </form>
-</div>
+
+    <!-- Category -->
+    <div class="form-group">
+
+        <label for="new-category-input">
+            <i class="fas fa-tag icon"></i>
+            Category
+        </label>
+
+        <input
+            type="text"
+            name="new_category"
+            id="new-category-input"
+            placeholder="Type a category (e.g. Culture, Politics, Travel...)"
+            list="category-suggestions"
+            autocomplete="off"
+            value="{% if object and object.category %}{{ object.category.name }}{% endif %}"
+        >
+
+        <datalist id="category-suggestions">
+            {% for cat in categories %}
+                <option value="{{ cat.name }}">
+            {% endfor %}
+        </datalist>
+
+        <small class="help-text">
+            <i class="fas fa-circle-info icon"></i>
+            Pick an existing category or type a new one — it will be created automatically.
+        </small>
+
+    </div>
+
+
+    <div class="form-actions">
+
+        <button type="submit" name="save_draft" class="btn-draft">
+            <i class="fas fa-floppy-disk icon"></i>
+            Save Draft
+        </button>
+
+        <button type="submit" name="publish" class="btn-submit-comment">
+            <i class="fas fa-paper-plane icon"></i>
+            {% if object %}Update & Publish{% else %}Publish{% endif %}
+        </button>
+
+        <a href="{% url 'index' %}" class="btn-cancel">
+            <i class="fas fa-xmark icon"></i>
+            Discard
+        </a>
+
+    </div>
+
+</form>
+
 {% endblock %}

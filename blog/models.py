@@ -1,9 +1,8 @@
 from django.db import models
-
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+import math
 
-# Create your models here.
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -20,6 +19,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+
 class Post(models.Model):
     STATUS_CHOICES = (
         ('draft', 'Draft'),
@@ -30,7 +30,8 @@ class Post(models.Model):
     slug = models.SlugField(unique=True, blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
     body = models.TextField()
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='posts')
+    cover_image = models.ImageField(upload_to='covers/', blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='posts')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
     featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -44,17 +45,21 @@ class Post(models.Model):
             base_slug = slugify(self.title)
             slug = base_slug
             counter = 1
-
             while Post.objects.filter(slug=slug).exists():
                 slug = f"{base_slug}-{counter}"
                 counter += 1
-
             self.slug = slug
-
         super().save(*args, **kwargs)
+
+    @property
+    def read_time(self):
+        word_count = len(self.body.split())
+        minutes = math.ceil(word_count / 200)  # average 200 wpm reading speed
+        return f"{minutes} min read"
 
     def __str__(self):
         return self.title
+
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')

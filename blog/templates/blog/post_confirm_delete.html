@@ -1,12 +1,38 @@
 {% extends 'blog/base.html' %}
 {% block content %}
+
 <div class="auth-wrapper fade-in text-center">
-    <h2>Confirm Deletion</h2>
-    <p>Are you absolutely sure you want to permanently delete <span><strong>"{{ object.title }}"</strong>? This action cannot be undone.</span></p>
+
+    <h2>
+        <i class="fas fa-triangle-exclamation icon"></i>
+        Confirm Deletion
+    </h2>
+
+    <p>
+        <i class="fas fa-circle-exclamation icon"></i>
+        Are you absolutely sure you want to permanently delete
+        <span>
+            <strong>"{{ object.title }}"</strong>
+        </span>?
+        This action cannot be undone.
+    </p>
+
     <form method="POST">
+
         {% csrf_token %}
-        <button type="submit" class="btn-delete-action" style="width:100%; margin-bottom:1rem;">Confirm Delete</button>
-        <a href="{% url 'index' %}" class="btn-cancel" style="display:block;">Cancel</a>
+
+        <button type="submit" class="btn-delete-action">
+            <i class="fas fa-trash icon"></i>
+            Confirm Delete
+        </button>
+
+        <a href="{% url 'index' %}" class="btn-cancel">
+            <i class="fas fa-arrow-left icon"></i>
+            Cancel
+        </a>
+
     </form>
+
 </div>
+
 {% endblock %}

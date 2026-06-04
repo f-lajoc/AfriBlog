@@ -19,7 +19,6 @@ function initThemeControl() {
 		const currentTheme = document.body.classList.contains("dark-mode")
 			? "dark"
 			: "light";
-
 		setThemeState(currentTheme === "dark" ? "light" : "dark");
 	});
 
@@ -27,10 +26,12 @@ function initThemeControl() {
 		if (theme === "dark") {
 			document.body.classList.add("dark-mode");
 			document.body.classList.remove("light-mode");
+			toggleButton.innerHTML = '<i class="fas fa-sun"></i>';
 			localStorage.setItem("afriblog-theme", "dark");
 		} else {
 			document.body.classList.add("light-mode");
 			document.body.classList.remove("dark-mode");
+			toggleButton.innerHTML = '<i class="fas fa-moon"></i>';
 			localStorage.setItem("afriblog-theme", "light");
 		}
 	}

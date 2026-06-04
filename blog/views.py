@@ -107,7 +107,7 @@ def logout_view(request):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['title', 'body', 'featured']
+    fields = ['title', 'body', 'cover_image', 'featured']
     template_name = 'blog/form.html'
 
     def form_valid(self, form):
@@ -136,7 +136,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['title', 'body', 'featured']
+    fields = ['title', 'body', 'cover_image', 'featured']
     template_name = 'blog/form.html'
 
     def test_func(self):

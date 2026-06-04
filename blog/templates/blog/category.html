@@ -1,21 +1,59 @@
 {% extends 'blog/base.html' %}
 {% block content %}
+
 <header class="category-header">
-    <h1>Category: <span class="font-accent">{{ category.name }}</span></h1>
-    <p>Exploring distinct viewpoints and written narratives within this stream.</p>
+    <h1>
+        <i class="fas fa-folder-open icon"></i>
+        Category:
+        <span class="font-accent">{{ category.name }}</span>
+    </h1>
+
+    <p>
+        <i class="fas fa-quote-left icon"></i>
+        Exploring distinct viewpoints and written narratives within this stream.
+    </p>
 </header>
 
+
 <section class="magazine-grid">
+
     {% for post in posts %}
     <article class="article-card">
+
         <div class="card-body">
-            <h4><a href="{% url 'detail' post.slug %}">{{ post.title }}</a></h4>
-            <p>{{ post.body|striptags|truncatewords:20 }}</p>
-            <small>By {{ post.author.username }} on {{ post.created_at|date:"M d" }}</small>
+
+            <h4>
+                <a href="{% url 'detail' post.slug %}">
+                    <i class="fas fa-book-open icon"></i>
+                    {{ post.title }}
+                </a>
+            </h4>
+
+            <p>
+                {{ post.body|striptags|truncatewords:20 }}
+            </p>
+
+            <small>
+                <i class="fas fa-user icon"></i>
+                By {{ post.author.username }}
+                &nbsp;•&nbsp;
+                <i class="fas fa-calendar-alt icon"></i>
+                {{ post.created_at|date:"M d" }}
+            </small>
+
         </div>
+
     </article>
+
     {% empty %}
-    <p class="no-results">No stories filed under this category yet.</p>
+
+    <p class="no-results">
+        <i class="fas fa-search-minus icon"></i>
+        No stories filed under this category yet.
+    </p>
+
     {% endfor %}
+
 </section>
+
 {% endblock %}
