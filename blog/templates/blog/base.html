@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
     
     <script src="https://kit.fontawesome.com/434622864a.js" crossorigin="anonymous"></script>
-    
+
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
@@ -23,14 +23,25 @@
         <div class="header-container">
             <a href="{% url 'index' %}" class="logo">AfriBlog</a>
             <nav class="nav-links">
-                {% if user.is_authenticated %}
-                    <span class="welcome-user">🪶 Welcome, <a href="{% url 'profile' user.username %}">{{ user.username }}</a></span>
-                    <a href="{% url 'post_create' %}" class="btn-write">Write</a>
-                    <a href="{% url 'logout' %}" class="auth-link">Logout</a>
-                {% else %}
-                    <a href="{% url 'login' %}" class="auth-link">Login</a>
-                    <a href="{% url 'register' %}" class="btn-write">Register</a>
-                {% endif %}
+               {% if user.is_authenticated %}
+    <span class="welcome-user">🪶 Welcome, <a href="{% url 'profile' user.username %}">{{ user.username }}</a></span>
+    <a href="{% url 'post_create' %}" class="btn-write">
+        <i class="fas fa-pen-nib"></i> Write
+    </a>
+    <a href="{% url 'drafts' %}" class="auth-link">
+        <i class="fas fa-file-alt"></i> Drafts
+    </a>
+    <a href="{% url 'logout' %}" class="auth-link">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+{% else %}
+    <a href="{% url 'login' %}" class="auth-link">
+        <i class="fas fa-sign-in-alt"></i> Login
+    </a>
+    <a href="{% url 'register' %}" class="btn-write">
+        <i class="fas fa-user-plus"></i> Register
+    </a>
+{% endif %}
                 <button id="theme-toggle" aria-label="Toggle dark mode" class="theme-toggle-btn">🌙</button>
             </nav>
         </div>
@@ -44,6 +55,6 @@
         <p>&copy; 2026 AfriBlog -- Community Blogging Platform built by <a href="https://github.com/f-lajoc" target="_blank">@lajoc_devs</a></p>
     </footer>
 
-    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/main.js' %}" defer></script>
 </body>
 </html>

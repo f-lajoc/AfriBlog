@@ -1,0 +1,42 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+<div class="form-wrapper fade-in">
+    <h2><i class="fas fa-file-alt"></i> My Drafts</h2>
+
+    {% if drafts %}
+    <div class="magazine-grid">
+        {% for draft in drafts %}
+        <article class="article-card draft-card">
+            <div class="card-body">
+                <span class="draft-badge">
+                    <i class="fas fa-pencil-alt"></i> Draft
+                </span>
+                <h4>{{ draft.title }}</h4>
+                <small>
+                    <i class="fas fa-clock"></i>
+                    Last edited {{ draft.updated_at|date:"F d, Y" }}
+                </small>
+                <div class="draft-actions">
+                    <a href="{% url 'post_update' draft.slug %}" class="btn-edit-action">
+                        <i class="fas fa-edit"></i> Continue editing
+                    </a>
+                    <a href="{% url 'post_delete' draft.slug %}" class="btn-delete-action">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </a>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-inbox" style="font-size: 2.5rem; opacity: 0.4;"></i>
+        <p>No drafts saved yet. Start writing and save a draft to continue later.</p>
+        <a href="{% url 'post_create' %}" class="btn-write">
+            <i class="fas fa-pen-nib"></i> Start writing
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
